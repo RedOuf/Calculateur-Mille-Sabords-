@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Calculateur pour Mille Sabords - Non officiel</title>
+  <link rel="manifest" href="manifest.json">
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Pirata+One&family=Roboto:wght@400;700&display=swap');
 
@@ -1610,6 +1611,17 @@ function undoLastTurn() {
   saveAllToStorage();
   render();
 }
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then(registration => {
+          console.log('ServiceWorker enregistré avec succès : ', registration.scope);
+        })
+        .catch(err => {
+          console.log('Échec de l\'enregistrement du ServiceWorker : ', err);
+        });
+    });
+  }
 </script>
 </body>
 </html>

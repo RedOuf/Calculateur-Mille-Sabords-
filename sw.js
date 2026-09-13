@@ -1,13 +1,13 @@
-const CACHE_NAME = 'mille-sabords-v1.0.0';
+const CACHE_NAME = 'mille-sabords-v1.0.1';
 const ASSETS_TO_CACHE = [
   'index.html',
-  'logo.png',
-  'Bruit de pieces.mp3',
-  'Bruit de canon.mp3',
-  'Bruit Rire diabolique.mp3',
-  'Bruit Victoire Zombie.mp3',
-  'Bruit zombie defaite.mp3',
-  'Bruit de levier.mp3'
+  'Images/logo.png',
+  'Sons/Bruit de pieces.mp3',
+  'Sons/Bruit de canon.mp3',
+  'Sons/Bruit Rire diabolique.mp3',
+  'Sons/Bruit Victoire Zombie.mp3',
+  'Sons/Bruit zombie defaite.mp3',
+  'Sons/Bruit de levier.mp3'
 ];
 
 self.addEventListener('install', (event) => {

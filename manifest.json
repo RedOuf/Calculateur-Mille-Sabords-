@@ -25,31 +25,31 @@
   "screenshots": [
     {
       "src": "./Images/S01.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1080x2179",
       "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
       "src": "./Images/S02.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1080x2179",
       "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
       "src": "./Images/S03.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1080x2179",
       "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
       "src": "./Images/S04.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1080x2179",
       "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
       "src": "./Images/S05.jpg",
-      "sizes": "1080x1920",
+      "sizes": "1080x2179",
       "type": "image/jpeg",
       "form_factor": "narrow"
     }

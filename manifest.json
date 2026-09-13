@@ -1,6 +1,6 @@
 {
   "name": "Calculateur pour Mille Sabords - Non officiel",
-  "short_name": "Mille Sabords",
+  "short_name": "Calculateur pour Mille Sabords - Non officiel",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#111a24",
@@ -8,7 +8,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "Logo.jpg",
+      "src": "logo.png",
       "sizes": "512x512",
       "type": "image/jpeg",
       "purpose": "any maskable"

@@ -1,7 +1,7 @@
-const CACHE_NAME = 'mille-sabords-v1';
+const CACHE_NAME = 'mille-sabords-v1.0.0';
 const ASSETS_TO_CACHE = [
   'index.html',
-  'Logo.jpg',
+  'logo.png',
   'Bruit de pieces.mp3',
   'Bruit de canon.mp3',
   'Bruit Rire diabolique.mp3',

@@ -5,6 +5,8 @@
   "description": "Calculateur de score non-officiel pour le jeu Mille Sabords",
   "start_url": "./index.html",
   "display": "standalone",
+  "categories": ["games", "utilities"] ,
+  "prefer_related_applications": false ,
   "background_color": "#111a24",
   "theme_color": "#2b1810",
   "orientation": "portrait",

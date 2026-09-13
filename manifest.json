@@ -7,6 +7,8 @@
   "display": "standalone",
   "categories": ["games", "utilities"] ,
   "prefer_related_applications": false ,
+  "related_applications": [] ,
+  "iarc_rating_id": "PEGI-7" ,
   "background_color": "#111a24",
   "theme_color": "#2b1810",
   "orientation": "portrait",

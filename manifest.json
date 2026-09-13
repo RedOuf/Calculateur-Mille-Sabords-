@@ -1,20 +1,21 @@
 {
-  "name": "Calculateur pour Mille Sabords - Non officiel",
+  "name": "Mille Sabords - Carnet de bord Non-Officiel",
   "short_name": "Mille Sabords",
-  "start_url": "index.html",
+  "description": "Calculateur de score non-officiel pour le jeu Mille Sabords",
+  "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#111a24",
   "theme_color": "#2b1810",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "logo-192.png",
+      "src": "./logo-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "logo.png",
+      "src": "./logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"

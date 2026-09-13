@@ -1,0 +1,1615 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mille Sabords - Carnet de Bord</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pirata+One&family=Roboto:wght@400;700&display=swap');
+
+    :root {
+      --wood-dark: #2b1810;
+      --wood-medium: #4a2e1b;
+      --wood-light: #7a4e29;
+      --parchment-bg: #f4e4bc;
+      --parchment-card: #ebd2a4;
+      --parchment-border: #b89762;
+      --gold-accent: #d4ac0d;
+      --gold-shiny: #f1c40f;
+      --red-pirate: #a93226;
+      --green-pirate: #1e8449;
+      --purple-pirate: #6c3483;
+      --zombie-green: #27ae60;
+      --text-dark: #2c1d11;
+      --text-muted: #6e5843;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Roboto', sans-serif; }
+
+    body {
+      background-color: #111a24;
+      background-image: 
+        radial-gradient(circle at 50% 50%, rgba(20, 35, 50, 0.8), rgba(5, 10, 15, 0.95)),
+        repeating-linear-gradient(45deg, rgba(255,255,255,0.02) 0px, rgba(255,255,255,0.02) 2px, transparent 2px, transparent 10px);
+      color: var(--text-dark);
+      padding: 8px;
+      max-width: 650px;
+      margin: 0 auto;
+      min-height: 100vh;
+    }
+
+    .pirate-frame {
+      background: var(--parchment-bg);
+      border: 4px solid var(--wood-medium);
+      border-radius: 16px;
+      padding: 12px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.7), inset 0 0 40px rgba(120, 80, 40, 0.3);
+      position: relative;
+    }
+
+    .pirate-header {
+      text-align: center;
+      padding-bottom: 12px;
+      border-bottom: 3px double var(--wood-medium);
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .skull-badge { font-size: 2rem; margin-bottom: -5px; }
+
+    h1 {
+      font-family: 'Pirata One', cursive;
+      color: var(--wood-dark);
+      font-size: 2.2rem;
+      letter-spacing: 2px;
+      text-shadow: 1px 1px 0px rgba(255,255,255,0.5);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-weight: bold;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .disclaimer-text {
+      margin-top: 6px;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.2;
+    }
+
+    .pirate-card {
+      background-color: var(--parchment-card);
+      border: 2px solid var(--parchment-border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 15px;
+      box-shadow: inset 0 0 15px rgba(0,0,0,0.05), 0 4px 6px rgba(0,0,0,0.15);
+    }
+
+    .card-title {
+      font-family: 'Pirata One', cursive;
+      color: var(--wood-dark);
+      font-size: 1.3rem;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px dashed var(--parchment-border);
+      padding-bottom: 5px;
+    }
+
+    .config-box {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: rgba(120, 80, 40, 0.1);
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+      border: 1px solid var(--parchment-border);
+    }
+
+    .config-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .config-label { font-size: 0.95rem; font-weight: bold; color: var(--wood-dark); }
+
+    .input-target {
+      background: #fff8eb;
+      border: 2px solid var(--wood-medium);
+      color: var(--wood-dark);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      width: 90px;
+      text-align: center;
+    }
+
+    .ship-lever-container {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--wood-dark);
+      padding: 6px 10px;
+      border-radius: 20px;
+      border: 2px solid var(--wood-light);
+      box-shadow: inset 0 2px 5px rgba(0,0,0,0.6), 0 2px 4px rgba(0,0,0,0.3);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lever-label { font-size: 0.75rem; font-weight: bold; color: #a89278; transition: color 0.3s; }
+    .lever-label.active { color: var(--gold-shiny); text-shadow: 0 0 5px rgba(241, 196, 15, 0.6); }
+
+    .lever-track {
+      width: 60px;
+      height: 24px;
+      background: #1a0f0a;
+      border-radius: 12px;
+      position: relative;
+      border: 1px solid var(--wood-medium);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.8);
+    }
+
+    .lever-handle {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #d4ac0d, #7a4e29, #4a2e1b);
+      border: 2px solid var(--gold-shiny);
+      border-radius: 50%;
+      position: absolute;
+      top: -3px;
+      left: -2px;
+      transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5);
+    }
+
+    .wheel-spoke { font-size: 1.1rem; line-height: 1; transition: transform 0.3s; }
+
+    .ship-lever-container.active .lever-handle {
+      transform: translateX(34px);
+      background: linear-gradient(135deg, #27ae60, #1e8449, #2b1810);
+      border-color: #2ecc71;
+    }
+
+    .ship-lever-container.active .wheel-spoke { transform: rotate(180deg); }
+
+    .fixed-settings-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--wood-light), var(--wood-dark));
+      border: 3px solid var(--gold-shiny);
+      color: var(--gold-shiny);
+      font-size: 1.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+      z-index: 999;
+      transition: transform 0.2s;
+    }
+
+    .fixed-settings-btn:active {
+      transform: scale(0.9);
+    }
+
+    .add-player-box { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+
+    .input-text {
+      flex: 1 1 180px;
+      min-width: 0;
+      background: #fff8eb;
+      border: 2px solid var(--wood-medium);
+      color: var(--wood-dark);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: bold;
+    }
+
+    .btn-add-player { flex: 0 0 auto; white-space: nowrap; }
+
+    .btn {
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+    .btn-gold { background: linear-gradient(180deg, var(--gold-shiny), var(--gold-accent)); color: var(--wood-dark); border: 1px solid #b8860b; }
+    .btn-wood { background: linear-gradient(180deg, var(--wood-light), var(--wood-medium)); color: #fff; }
+    .btn-danger { background: var(--red-pirate); color: #fff; }
+
+    .btn-start {
+      background: linear-gradient(180deg, #27ae60, #1e8449);
+      color: #fff;
+      width: 100%;
+      padding: 12px;
+      font-size: 1.1rem;
+      font-family: 'Pirata One', cursive;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    .btn-next-game {
+      background: linear-gradient(180deg, var(--gold-shiny), var(--gold-accent));
+      color: var(--wood-dark);
+      border: 1px solid #b8860b;
+      font-weight: bold;
+      margin-top: 10px;
+      padding: 8px 16px;
+      font-size: 1rem;
+    }
+
+    .btn-sm { padding: 4px 8px; font-size: 0.8rem; }
+
+    .setup-player-list { display: flex; flex-direction: column; gap: 6px; margin-bottom: 10px; }
+    .setup-player-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8eb;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border-left: 4px solid var(--wood-medium);
+      border: 1px solid var(--parchment-border);
+    }
+
+    .saved-games-list { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+    .saved-game-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff8eb;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid var(--parchment-border);
+    }
+    .saved-game-item.active-game {
+      border: 2px solid var(--green-pirate);
+      background: #eafaf1;
+    }
+    .saved-game-info { display: flex; flex-direction: column; gap: 2px; }
+    .saved-game-title { font-weight: bold; color: var(--wood-dark); font-size: 0.95rem; }
+    .saved-game-meta { font-size: 0.8rem; color: var(--text-muted); }
+    .saved-game-actions { display: flex; gap: 6px; }
+
+    .alert-banner {
+      background: var(--red-pirate);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: none;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      line-height: 1.4;
+    }
+
+    .start-banner {
+      background: #fcf3cf;
+      border: 2px dashed var(--gold-accent);
+      color: var(--wood-dark);
+      padding: 10px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+      display: none;
+    }
+
+    .player-card {
+      background: #fff8eb;
+      border: 2px solid var(--parchment-border);
+      border-radius: 10px;
+      padding: 12px;
+      margin-bottom: 10px;
+      position: relative;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .player-card.active {
+      border-color: var(--gold-accent);
+      background: #fffdf5;
+      box-shadow: 0 0 12px rgba(212, 172, 13, 0.5);
+    }
+
+    .player-card.winner {
+      border-color: var(--green-pirate);
+      background: #eafaf1;
+    }
+
+    .player-header { display: flex; justify-content: space-between; align-items: center; }
+    .player-name-group { display: flex; align-items: center; gap: 8px; }
+    .player-rank { font-size: 1.2rem; }
+    .player-name { font-weight: bold; font-size: 1.1rem; color: var(--wood-dark); }
+    .player-actions { display: flex; gap: 4px; }
+
+    .score-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: 6px; }
+    .player-score {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: var(--wood-dark);
+      font-family: 'Pirata One', cursive;
+      cursor: pointer;
+    }
+    .player-score:hover { text-decoration: underline; }
+    .score-target-text { font-size: 0.85rem; color: var(--text-muted); font-weight: bold; }
+
+    .progress-bar-bg { background: #d7ccc8; height: 10px; border-radius: 5px; overflow: hidden; margin-top: 8px; border: 1px solid var(--parchment-border); }
+    .progress-bar-fill { background: linear-gradient(90deg, var(--gold-accent), var(--gold-shiny)); height: 100%; width: 0%; transition: width 0.3s; }
+    .progress-bar-fill.finished { background: var(--green-pirate); }
+
+    .turn-header {
+      text-align: center;
+      background: var(--wood-medium);
+      color: #fff8eb;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 12px;
+      font-family: 'Pirata One', cursive;
+      font-size: 1.3rem;
+      letter-spacing: 1px;
+    }
+
+    .turn-buttons { display: flex; flex-direction: column; gap: 10px; }
+    .btn-action-row { display: flex; gap: 10px; }
+
+    .btn-turn {
+      flex: 1;
+      padding: 14px 8px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+      color: white;
+    }
+
+    .btn-turn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.3); }
+
+    .btn-add { background: linear-gradient(180deg, #27ae60, #1e8449); }
+    .btn-sub { background: linear-gradient(180deg, #c0392b, #922b21); }
+    .btn-skull { background: linear-gradient(180deg, #7d3c98, #512e5f); }
+    .btn-zombie { background: linear-gradient(180deg, #16a085, #117a65); }
+
+    .action-submenu {
+      display: none;
+      border-radius: 8px;
+      padding: 10px;
+      margin-top: 10px;
+      text-align: center;
+    }
+
+    .add-submenu { background: rgba(39, 174, 96, 0.12); border: 2px dashed var(--green-pirate); }
+    .sub-submenu { background: rgba(192, 57, 43, 0.12); border: 2px dashed var(--red-pirate); }
+    .zombie-submenu { background: rgba(22, 160, 133, 0.15); border: 2px dashed #16a085; }
+    .skull-submenu { background: rgba(108, 52, 131, 0.15); border: 2px dashed var(--purple-pirate); }
+
+    .submenu-title { font-weight: bold; color: var(--wood-dark); margin-bottom: 10px; font-size: 0.95rem; }
+
+    .points-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 8px; }
+
+    .btn-zero-points {
+      width: 100%; padding: 10px; border-radius: 20px; font-weight: bold; font-size: 1rem; margin-bottom: 8px; border: none; box-shadow: 0 3px 0 rgba(0,0,0,0.25); cursor: pointer;
+    }
+
+    .btn-add-points { background: linear-gradient(180deg, #27ae60, #1e8449); color: white; border: none; padding: 10px 4px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
+    .btn-sub-points { background: linear-gradient(180deg, #c0392b, #7b241c); color: white; border: none; padding: 10px 4px; border-radius: 20px; font-weight: bold; font-size: 0.95rem; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,0.25); }
+
+    .btn-add-points:active, .btn-sub-points:active, .btn-zero-points:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.25); }
+
+    .btn-other-points { width: 100%; padding: 10px; border-radius: 20px; font-weight: bold; font-size: 1rem; border: none; box-shadow: 0 3px 0 rgba(0,0,0,0.25); cursor: pointer; color: white; }
+
+    .skull-buttons-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+
+    .btn-skull-count {
+      background: linear-gradient(180deg, #8e44ad, #6c3483); color: white; border: none; padding: 10px 0; border-radius: 6px; font-weight: bold; font-size: 1rem; cursor: pointer; box-shadow: 0 3px 0 rgba(0,0,0,0.3);
+    }
+
+    .btn-skull-count:active { transform: translateY(2px); box-shadow: 0 1px 0 rgba(0,0,0,0.3); }
+
+    .pirate-card-option {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+      background: rgba(43, 24, 16, 0.08);
+      padding: 6px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: var(--wood-dark);
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+
+    .pirate-card-option input[type="checkbox"] {
+      width: 16px;
+      height: 16px;
+      accent-color: var(--purple-pirate);
+      cursor: pointer;
+    }
+
+    .swords-select-box {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 10px;
+      background: rgba(43, 24, 16, 0.12);
+      padding: 6px;
+      border-radius: 6px;
+      font-weight: bold;
+      color: var(--wood-dark);
+      font-size: 0.85rem;
+    }
+
+    .select-swords {
+      background: #fff8eb;
+      border: 2px solid var(--wood-medium);
+      color: var(--wood-dark);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .history-list { font-size: 0.85rem; max-height: 180px; overflow-y: auto; }
+    .history-item { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid var(--parchment-border); color: var(--text-muted); }
+    .history-item strong { color: var(--wood-dark); }
+
+    .pirate-modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.75); display: none; align-items: center; justify-content: center; z-index: 1000; padding: 16px;
+    }
+
+    .pirate-modal {
+      background: var(--parchment-bg); border: 4px solid var(--wood-medium); border-radius: 12px; padding: 20px; width: 100%; max-width: 380px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); text-align: center;
+    }
+
+    .pirate-modal-title { font-family: 'Pirata One', cursive; font-size: 1.5rem; color: var(--wood-dark); margin-bottom: 10px; }
+
+    .pirate-modal-text {
+      font-weight: bold; color: var(--wood-dark); font-size: 1.05rem; margin-bottom: 15px; line-height: 1.4;
+    }
+
+    .pirate-modal-input {
+      width: 100%; padding: 10px; font-size: 1.2rem; font-weight: bold; text-align: center; border: 2px solid var(--wood-medium); border-radius: 6px; background: #fff8eb; color: var(--wood-dark); margin-bottom: 15px;
+    }
+
+    .pirate-modal-buttons { display: flex; gap: 10px; }
+    .pirate-modal-buttons .btn { flex: 1; padding: 10px; }
+  </style>
+</head>
+<body>
+
+<button class="fixed-settings-btn" onclick="openAudioSettingsModal()" title="Réglages audio">⚙️</button>
+
+<div class="pirate-frame">
+  <header class="pirate-header">
+    <div class="skull-badge">☠️</div>
+    <h1>Mille Sabords</h1>
+    <div class="subtitle">📜 Carnet de Bord & Scores 🏴‍☠️</div>
+    <div class="disclaimer-text">
+      Application non officielle. "Mille Sabords" est une marque déposée de Gigamic / AMIGO. Ce compteur nécessite le jeu original pour être utilisé.
+    </div>
+  </header>
+
+  <div class="alert-banner" id="alert-banner"></div>
+  <div class="start-banner" id="start-banner">⚓ C'est parti ! <span id="first-player-announced"></span> prend la barre !</div>
+
+  <!-- MENU PRINCIPAL (PRÉPARATION ET ARCHIVES) -->
+  <div id="main-menu">
+    <div class="pirate-card" id="setup-card">
+      <div class="card-title">
+        <span>⚙️ Réglages & Équipage</span>
+      </div>
+      
+      <div class="config-box">
+        <div class="config-row">
+          <span class="config-label">🎯 Objectif de la Chasse :</span>
+          <div>
+            <input type="number" id="target-score-input" class="input-target" value="6000" step="500" onchange="updateTargetScore()" oninput="updateTargetScore()">
+            <span style="font-weight: bold; color: #5a3d20;">pts</span>
+          </div>
+        </div>
+        
+        <div class="config-row">
+          <span class="config-label">⚓ Points Négatifs :</span>
+          <div class="ship-lever-container" id="ship-lever-neg" onclick="toggleNegativeLever()">
+            <span class="lever-label active" id="label-neg-off">Désactivés</span>
+            <div class="lever-track"><div class="lever-handle"><span class="wheel-spoke">☸</span></div></div>
+            <span class="lever-label" id="label-neg-on">Autorisés</span>
+          </div>
+        </div>
+
+        <div class="config-row">
+          <span class="config-label">🎲 1er Joueur Aléatoire :</span>
+          <div class="ship-lever-container" id="ship-lever-random" onclick="toggleRandomLever()">
+            <span class="lever-label active" id="label-random-off">Désactivé</span>
+            <div class="lever-track"><div class="lever-handle"><span class="wheel-spoke">☸</span></div></div>
+            <span class="lever-label" id="label-random-on">Activé</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="add-player-box">
+        <input type="text" id="player-name-input" class="input-text" placeholder="Nom du moussaillon..." autocomplete="off" onkeydown="if(event.key==='Enter') addPlayer()">
+        <button class="btn btn-gold btn-add-player" onclick="addPlayer()">➕ Recruter</button>
+      </div>
+
+      <div class="setup-player-list" id="setup-player-list"></div>
+
+      <button class="btn btn-start" id="btn-start-game" onclick="createNewGame()" style="display: none;">⚓ Levez l'Ancre ! (Nouvelle Partie)</button>
+    </div>
+
+    <!-- HISTORIQUE DES PARTIES ENREGISTRÉES -->
+    <div class="pirate-card" id="saved-games-card">
+      <div class="card-title">
+        <span>📚 Archives du Capitaine (Parties)</span>
+      </div>
+      <div class="saved-games-list" id="saved-games-list"></div>
+    </div>
+  </div>
+
+  <!-- SECTION JEU -->
+  <div id="game-section" style="display: none;">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 12px; gap: 8px;">
+      <button class="btn btn-wood btn-sm" onclick="showSetupScreen()">📋 Menu Principal</button>
+      <button class="btn btn-wood btn-sm" onclick="resetCurrentGame()">🔄 Recommencer cette partie</button>
+    </div>
+
+    <div class="pirate-card" id="turn-card">
+      <div class="turn-header">🧭 Capitaine du tour : <span id="current-player-name">-</span></div>
+      
+      <div class="turn-buttons">
+        <div class="btn-action-row">
+          <button class="btn-turn btn-add" onclick="toggleAddMenu()">💰+ Butin</button>
+          <button class="btn-turn btn-sub" onclick="toggleSubMenu()">💣- Perte</button>
+        </div>
+        <div class="btn-action-row">
+          <button class="btn-turn btn-skull" onclick="toggleSkullMenu()">💀 Île de Tête-de-Mort</button>
+          <button class="btn-turn btn-zombie" onclick="toggleZombieMenu()">🧟 Attaque Zombies</button>
+        </div>
+
+        <div class="action-submenu add-submenu" id="add-submenu">
+          <button class="btn-zero-points btn-add" onclick="addScoreToCurrentPlayer(0)">0 point</button>
+          <div class="points-grid" id="add-points-grid"></div>
+          <button class="btn-other-points btn-add" onclick="openCustomAddModal()">Autre Saisie</button>
+        </div>
+
+        <div class="action-submenu sub-submenu" id="sub-submenu">
+          <button class="btn-zero-points btn-sub" onclick="addScoreToCurrentPlayer(0)">0 point</button>
+          <div class="points-grid" id="sub-points-grid"></div>
+          <button class="btn-other-points btn-sub" onclick="openCustomSubModal()">Autre Saisie</button>
+        </div>
+
+        <div class="action-submenu skull-submenu" id="skull-submenu">
+          <label class="pirate-card-option">
+            <input type="checkbox" id="pirate-card-multiplier" onchange="togglePirateCardOption()">
+            <span>🏴‍☠️ Carte Capitaine / Pirate (x2) : 200 pts/tête</span>
+          </label>
+          <label class="pirate-card-option">
+            <input type="checkbox" id="peace-card-checkbox" onchange="togglePeaceCardOption()">
+            <span>☮️ Carte Paix : -100 pts/tête aux autres & -500 pts/sabre à soi</span>
+          </label>
+          <div class="swords-select-box" id="swords-select-box">
+            <span>⚔️ Dés Sabre obtenus :</span>
+            <select id="swords-count-select" class="select-swords">
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div class="submenu-title">💀 Nombre de Têtes de mort obtenues :</div>
+          <div class="skull-buttons-grid">
+            <button class="btn-skull-count" onclick="resolveSkullIsland(4)">4</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(5)">5</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(6)">6</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(7)">7</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(8)">8</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(9)">9</button>
+            <button class="btn-skull-count" onclick="resolveSkullIsland(10)">10</button>
+          </div>
+        </div>
+
+        <div class="action-submenu zombie-submenu" id="zombie-submenu">
+          <div class="submenu-title">🧟 Combat Zombie :</div>
+          <div class="btn-action-row">
+            <button class="btn-turn btn-add" onclick="resolveZombie(true)">🟢 Victoire (+1200)</button>
+            <button class="btn-turn btn-sub" onclick="resolveZombie(false)">🔴 Défaite (1200 aux rivaux)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pirate-card">
+      <div class="card-title">🏆 Table des Capitaines</div>
+      <div id="players-container"></div>
+    </div>
+
+    <div class="pirate-card" id="history-card" style="display: none;">
+      <div class="card-title">
+        <span>📜 Journal de Bord du Tour</span>
+        <button class="btn btn-wood btn-sm" onclick="undoLastTurn()">↩️ Annuler dernier coup</button>
+      </div>
+      <div class="history-list" id="history-container"></div>
+    </div>
+  </div>
+</div>
+
+<div class="pirate-modal-overlay" id="custom-modal-overlay">
+  <div class="pirate-modal">
+    <div class="pirate-modal-title" id="modal-title">Saisie du Butin</div>
+    <div class="pirate-modal-text" id="modal-text" style="display: none;"></div>
+    <div id="modal-custom-content"></div>
+    <input type="number" id="modal-input" class="pirate-modal-input" placeholder="0" step="50" autocomplete="off" onkeydown="if(event.key==='Enter') confirmModal()">
+    <div class="pirate-modal-buttons">
+      <button class="btn btn-danger" id="modal-btn-cancel" onclick="closeModal()">Annuler</button>
+      <button class="btn btn-gold" id="modal-btn-confirm" onclick="confirmModal()">Valider</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// --- EFFETS SONORES (Nouveaux fichiers intégrés) ---
+const SOUND_EFFECTS = {
+  coin: new Audio("Bruit de pieces.mp3"),
+  bomb: new Audio("Bruit de canon.mp3"),
+  skull: new Audio("Bruit Rire diabolique.mp3"),
+  victory: new Audio("Bruit Victoire Zombie.mp3"),
+  zombieDefeat: new Audio("Bruit zombie defaite.mp3"),
+  click: new Audio("Bruit de levier.mp3")
+};
+
+function playSound(type) {
+  if (!soundEnabled) return;
+  const audio = SOUND_EFFECTS[type];
+  if (audio) {
+    audio.currentTime = 0;
+    audio.play().catch(() => {});
+  }
+}
+
+let savedGames = [];
+let currentGameId = null;
+
+let players = [];
+let activePlayerIndex = 0;
+let initialFirstPlayerIndex = 0;
+let targetScore = 6000;
+let allowNegativeScores = false;
+let randomFirstPlayer = false;
+let soundEnabled = true;
+let history = [];
+let gameStarted = false;
+let isFinalRound = false;
+let playersWhoHadFinalTurn = new Set();
+
+let currentModalCallback = null;
+
+window.onload = function() {
+  loadSavedGamesFromStorage();
+  loadSettingsFromStorage();
+  renderSavedGamesList();
+};
+
+function loadSettingsFromStorage() {
+  const soundPref = localStorage.getItem('mille_sabords_sound');
+  if (soundPref !== null) {
+    soundEnabled = JSON.parse(soundPref);
+  }
+}
+
+function saveSettingsToStorage() {
+  localStorage.setItem('mille_sabords_sound', JSON.stringify(soundEnabled));
+}
+
+function toggleSoundLever() {
+  soundEnabled = !soundEnabled;
+  const lever = document.getElementById('ship-lever-sound');
+  const labelOff = document.getElementById('label-sound-off');
+  const labelOn = document.getElementById('label-sound-on');
+
+  if (soundEnabled) {
+    lever.classList.add('active');
+    labelOff.classList.remove('active');
+    labelOn.classList.add('active');
+  } else {
+    lever.classList.remove('active');
+    labelOff.classList.add('active');
+    labelOn.classList.remove('active');
+  }
+  playSound('click');
+  saveSettingsToStorage();
+}
+
+function openAudioSettingsModal() {
+  playSound('click');
+  const customContainer = document.getElementById('modal-custom-content');
+  document.getElementById('modal-title').innerText = "⚙️ Réglages Audio";
+  
+  const textElem = document.getElementById('modal-text');
+  textElem.style.display = 'none';
+  
+  const input = document.getElementById('modal-input');
+  input.style.display = 'none';
+
+  const isAudioActive = soundEnabled;
+
+  customContainer.innerHTML = `
+    <div style="display:flex; flex-direction:column; align-items:center; gap:10px; margin-bottom:15px;">
+      <span class="config-label">🔊 Effets Sonores :</span>
+      <div class="ship-lever-container ${isAudioActive ? 'active' : ''}" id="ship-lever-sound" onclick="toggleSoundLever()">
+        <span class="lever-label ${!isAudioActive ? 'active' : ''}" id="label-sound-off">Désactivés</span>
+        <div class="lever-track"><div class="lever-handle"><span class="wheel-spoke">☸</span></div></div>
+        <span class="lever-label ${isAudioActive ? 'active' : ''}" id="label-sound-on">Activés</span>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('modal-btn-cancel').style.display = 'none';
+  document.getElementById('modal-btn-confirm').innerText = 'Fermer';
+  
+  document.getElementById('custom-modal-overlay').style.display = 'flex';
+  currentModalCallback = () => {
+    customContainer.innerHTML = '';
+    document.getElementById('modal-btn-cancel').style.display = 'inline-flex';
+  };
+}
+
+function loadSavedGamesFromStorage() {
+  const data = localStorage.getItem('mille_sabords_games');
+  if (data) {
+    try {
+      savedGames = JSON.parse(data);
+    } catch(e) {
+      savedGames = [];
+    }
+  }
+}
+
+function saveAllToStorage() {
+  if (currentGameId) {
+    updateCurrentGameInList();
+  }
+  localStorage.setItem('mille_sabords_games', JSON.stringify(savedGames));
+  renderSavedGamesList();
+}
+
+function updateCurrentGameInList() {
+  const gameIndex = savedGames.findIndex(g => g.id === currentGameId);
+  const gameData = {
+    id: currentGameId,
+    date: new Date().toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }),
+    targetScore: targetScore,
+    allowNegativeScores: allowNegativeScores,
+    randomFirstPlayer: randomFirstPlayer,
+    players: players,
+    activePlayerIndex: activePlayerIndex,
+    initialFirstPlayerIndex: initialFirstPlayerIndex,
+    history: history,
+    gameStarted: gameStarted,
+    isFinalRound: isFinalRound,
+    playersWhoHadFinalTurn: Array.from(playersWhoHadFinalTurn)
+  };
+
+  if (gameIndex >= 0) {
+    savedGames[gameIndex] = gameData;
+  } else {
+    savedGames.unshift(gameData);
+  }
+}
+
+function renderSavedGamesList() {
+  const container = document.getElementById('saved-games-list');
+  container.innerHTML = '';
+
+  if (savedGames.length === 0) {
+    container.innerHTML = '<div style="font-size:0.85rem; color: var(--text-muted); text-align:center;">Aucune partie enregistrée pour le moment.</div>';
+    return;
+  }
+
+  savedGames.forEach(g => {
+    const item = document.createElement('div');
+    item.className = `saved-game-item ${g.id === currentGameId ? 'active-game' : ''}`;
+    
+    const isFinished = g.players.some(p => p.score >= g.targetScore) && 
+                       g.players.every(p => p.score >= g.targetScore || g.playersWhoHadFinalTurn.includes(p.id));
+
+    const playerNames = g.players.map(p => `${p.name} (${p.score}pt)`).join(', ');
+
+    item.innerHTML = `
+      <div class="saved-game-info">
+        <div class="saved-game-title">
+          ${isFinished ? '🏆 (Terminée)' : '⚓ (En cours)'} ${g.date}
+        </div>
+        <div class="saved-game-meta">${playerNames}</div>
+      </div>
+      <div class="saved-game-actions">
+        <button class="btn btn-gold btn-sm" onclick="loadGame('${g.id}')">▶️ Reprendre</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteGame('${g.id}')">🗑️</button>
+      </div>
+    `;
+    container.appendChild(item);
+  });
+}
+
+function createNewGame() {
+  if (players.length < 2) return;
+  playSound('victory');
+
+  currentGameId = 'game_' + Date.now();
+  gameStarted = true;
+  isFinalRound = false;
+  playersWhoHadFinalTurn.clear();
+
+  initPointGrids();
+
+  if (randomFirstPlayer) {
+    activePlayerIndex = Math.floor(Math.random() * players.length);
+  } else {
+    activePlayerIndex = 0;
+  }
+  initialFirstPlayerIndex = activePlayerIndex;
+
+  document.getElementById('main-menu').style.display = 'none';
+  document.getElementById('game-section').style.display = 'block';
+
+  const startBanner = document.getElementById('start-banner');
+  document.getElementById('first-player-announced').innerText = players[activePlayerIndex].name;
+  startBanner.style.display = 'block';
+
+  saveAllToStorage();
+  render();
+}
+
+function loadGame(id) {
+  const g = savedGames.find(item => item.id === id);
+  if (!g) return;
+  playSound('click');
+
+  currentGameId = g.id;
+  targetScore = g.targetScore;
+  allowNegativeScores = g.allowNegativeScores;
+  randomFirstPlayer = g.randomFirstPlayer;
+  players = g.players;
+  activePlayerIndex = g.activePlayerIndex;
+  initialFirstPlayerIndex = g.initialFirstPlayerIndex;
+  history = g.history;
+  gameStarted = g.gameStarted;
+  isFinalRound = g.isFinalRound;
+  playersWhoHadFinalTurn = new Set(g.playersWhoHadFinalTurn || []);
+
+  document.getElementById('target-score-input').value = targetScore;
+  
+  const negLever = document.getElementById('ship-lever-neg');
+  if (allowNegativeScores) {
+    negLever.classList.add('active');
+    document.getElementById('label-neg-off').classList.remove('active');
+    document.getElementById('label-neg-on').classList.add('active');
+  } else {
+    negLever.classList.remove('active');
+    document.getElementById('label-neg-off').classList.add('active');
+    document.getElementById('label-neg-on').classList.remove('active');
+  }
+
+  const randLever = document.getElementById('ship-lever-random');
+  if (randomFirstPlayer) {
+    randLever.classList.add('active');
+    document.getElementById('label-random-off').classList.remove('active');
+    document.getElementById('label-random-on').classList.add('active');
+  } else {
+    randLever.classList.remove('active');
+    document.getElementById('label-random-off').classList.add('active');
+    document.getElementById('label-random-on').classList.remove('active');
+  }
+
+  initPointGrids();
+
+  document.getElementById('main-menu').style.display = 'none';
+  document.getElementById('game-section').style.display = 'block';
+
+  if (players[activePlayerIndex]) {
+    document.getElementById('first-player-announced').innerText = players[activePlayerIndex].name;
+    document.getElementById('start-banner').style.display = 'block';
+  }
+
+  renderHistory();
+  render();
+  renderSavedGamesList();
+}
+
+function deleteGame(id) {
+  showConfirmModal("🗑️ Suppression", "Voulez-vous supprimer définitivement cette partie des archives ?", () => {
+    savedGames = savedGames.filter(g => g.id !== id);
+    if (currentGameId === id) {
+      showSetupScreen();
+    }
+    saveAllToStorage();
+  });
+}
+
+function showSetupScreen() {
+  playSound('click');
+  document.getElementById('main-menu').style.display = 'block';
+  document.getElementById('game-section').style.display = 'none';
+  document.getElementById('start-banner').style.display = 'none';
+  document.getElementById('alert-banner').style.display = 'none';
+  renderSetup();
+  renderSavedGamesList();
+}
+
+function resetCurrentGame() {
+  showConfirmModal("🔄 Recommencer", "Réinitialiser les scores de la partie en cours ?", () => {
+    players.forEach(p => p.score = 0);
+    history = [];
+    isFinalRound = false;
+    playersWhoHadFinalTurn.clear();
+    activePlayerIndex = initialFirstPlayerIndex;
+
+    document.getElementById('history-card').style.display = 'none';
+    document.getElementById('history-container').innerHTML = '';
+
+    saveAllToStorage();
+    render();
+  });
+}
+
+function initPointGrids() {
+  const addGrid = document.getElementById('add-points-grid');
+  const subGrid = document.getElementById('sub-points-grid');
+  addGrid.innerHTML = '';
+  subGrid.innerHTML = '';
+
+  const values = [];
+  for (let i = 100; i <= 2000; i += 100) { values.push(i); }
+  values.push(3000);
+
+  values.forEach(val => {
+    const btnAdd = document.createElement('button');
+    btnAdd.className = 'btn-add-points';
+    btnAdd.innerText = `+${val}`;
+    btnAdd.onclick = () => addScoreToCurrentPlayer(val);
+    addGrid.appendChild(btnAdd);
+
+    const btnSub = document.createElement('button');
+    btnSub.className = 'btn-sub-points';
+    btnSub.innerText = `-${val}`;
+    btnSub.onclick = () => addScoreToCurrentPlayer(-val);
+    subGrid.appendChild(btnSub);
+  });
+}
+
+function updateTargetScore() {
+  const val = parseInt(document.getElementById('target-score-input').value);
+  if (!isNaN(val) && val > 0) {
+    targetScore = val;
+    saveAllToStorage();
+  }
+}
+
+function toggleNegativeLever() {
+  playSound('click');
+  allowNegativeScores = !allowNegativeScores;
+  const lever = document.getElementById('ship-lever-neg');
+  const labelOff = document.getElementById('label-neg-off');
+  const labelOn = document.getElementById('label-neg-on');
+
+  if (allowNegativeScores) {
+    lever.classList.add('active');
+    labelOff.classList.remove('active');
+    labelOn.classList.add('active');
+  } else {
+    lever.classList.remove('active');
+    labelOff.classList.add('active');
+    labelOn.classList.remove('active');
+  }
+  saveAllToStorage();
+}
+
+function toggleRandomLever() {
+  playSound('click');
+  randomFirstPlayer = !randomFirstPlayer;
+  const lever = document.getElementById('ship-lever-random');
+  const labelOff = document.getElementById('label-random-off');
+  const labelOn = document.getElementById('label-random-on');
+
+  if (randomFirstPlayer) {
+    lever.classList.add('active');
+    labelOff.classList.remove('active');
+    labelOn.classList.add('active');
+  } else {
+    lever.classList.remove('active');
+    labelOff.classList.add('active');
+    labelOn.classList.remove('active');
+  }
+  saveAllToStorage();
+}
+
+function addPlayer() {
+  const input = document.getElementById('player-name-input');
+  const name = input.value.trim();
+  if (name) {
+    playSound('click');
+    players.push({ id: Date.now(), name: name, score: 0 });
+    input.value = '';
+    renderSetup();
+  }
+}
+
+function deletePlayer(id) {
+  playSound('click');
+  players = players.filter(p => p.id !== id);
+  renderSetup();
+}
+
+function renderSetup() {
+  const list = document.getElementById('setup-player-list');
+  list.innerHTML = '';
+
+  players.forEach((p, index) => {
+    const item = document.createElement('div');
+    item.className = 'setup-player-item';
+    item.innerHTML = `
+      <span><strong>${index + 1}.</strong> ${p.name}</span>
+      <button class="btn btn-danger btn-sm" onclick="deletePlayer(${p.id})">🗑️</button>
+    `;
+    list.appendChild(item);
+  });
+
+  const btnStart = document.getElementById('btn-start-game');
+  btnStart.style.display = players.length >= 2 ? 'block' : 'none';
+}
+
+function startNextGame() {
+  playSound('victory');
+  players.forEach(p => p.score = 0);
+  history = [];
+  isFinalRound = false;
+  playersWhoHadFinalTurn.clear();
+
+  if (randomFirstPlayer) {
+    activePlayerIndex = Math.floor(Math.random() * players.length);
+  } else {
+    activePlayerIndex = (initialFirstPlayerIndex + 1) % players.length;
+  }
+  
+  initialFirstPlayerIndex = activePlayerIndex;
+
+  const startingPlayer = players[activePlayerIndex];
+  document.getElementById('first-player-announced').innerText = startingPlayer.name;
+  document.getElementById('start-banner').style.display = 'block';
+
+  document.getElementById('history-card').style.display = 'none';
+  document.getElementById('history-container').innerHTML = '';
+
+  saveAllToStorage();
+  render();
+}
+
+function checkGameStatusAndAdvance() {
+  if (players.length === 0) return;
+
+  playersWhoHadFinalTurn.add(players[activePlayerIndex].id);
+  const qualifyWinners = players.filter(p => p.score >= targetScore);
+
+  if (qualifyWinners.length > 0) {
+    isFinalRound = true;
+  } else {
+    isFinalRound = false;
+    playersWhoHadFinalTurn.clear();
+  }
+
+  let eligibleIndices = [];
+
+  if (isFinalRound) {
+    players.forEach((p, idx) => {
+      if (p.score < targetScore && !playersWhoHadFinalTurn.has(p.id)) {
+        eligibleIndices.push(idx);
+      }
+    });
+  }
+
+  if (eligibleIndices.length === 0) {
+    activePlayerIndex = (activePlayerIndex + 1) % players.length;
+  } else {
+    let found = false;
+    for (let step = 1; step <= players.length; step++) {
+      let testIdx = (activePlayerIndex + step) % players.length;
+      if (eligibleIndices.includes(testIdx)) {
+        activePlayerIndex = testIdx;
+        found = true;
+        break;
+      }
+    }
+    if (!found) activePlayerIndex = eligibleIndices[0];
+  }
+}
+
+function adjustScore(player, delta) {
+  const oldScore = player.score;
+  player.score += delta;
+  if (!allowNegativeScores && player.score < 0) {
+    player.score = 0;
+  }
+  return player.score - oldScore;
+}
+
+function render() {
+  if (!gameStarted) return;
+
+  closeAllSubmenus();
+
+  const sorted = [...players].sort((a, b) => b.score - a.score);
+  const winners = players.filter(p => p.score >= targetScore);
+  const alertBanner = document.getElementById('alert-banner');
+  
+  if (winners.length > 0) {
+    isFinalRound = true;
+    const winnerNames = winners.map(w => w.name).join(', ');
+    const remainingToPlay = players.filter(p => p.score < targetScore && !playersWhoHadFinalTurn.has(p.id));
+    
+    if (remainingToPlay.length > 0) {
+      alertBanner.style.display = 'block';
+      alertBanner.innerHTML = `🎯 <strong>${winnerNames}</strong> a atteint l'objectif !<br>⚡ Dernier tour pour les autres moussaillons !`;
+    } else {
+      alertBanner.style.display = 'block';
+      alertBanner.innerHTML = `
+        🏆 <strong>Fin de la Chasse !</strong><br>
+        Le grand vainqueur est <strong>${sorted[0].name}</strong> avec ${sorted[0].score} pts !<br>
+        <button class="btn btn-next-game" onclick="startNextGame()">🏴‍☠️ Lancer une Nouvelle Partie avec la même équipe</button>
+      `;
+    }
+  } else {
+    isFinalRound = false;
+    alertBanner.style.display = 'none';
+  }
+
+  const container = document.getElementById('players-container');
+  container.innerHTML = '';
+
+  if (history.length > 0) {
+    document.getElementById('history-card').style.display = 'block';
+  }
+
+  players.forEach((p, idx) => {
+    const rankIndex = sorted.findIndex(s => s.id === p.id);
+    const rankMedals = ['🥇', '🥈', '🥉'];
+    const rankDisplay = rankMedals[rankIndex] || `#${rankIndex + 1}`;
+    const pct = Math.min(100, Math.max(0, (p.score / targetScore) * 100));
+
+    const card = document.createElement('div');
+    card.className = `player-card ${idx === activePlayerIndex ? 'active' : ''} ${p.score >= targetScore ? 'winner' : ''}`;
+    
+    card.innerHTML = `
+      <div class="player-header">
+        <div class="player-name-group">
+          <span class="player-rank">${rankDisplay}</span>
+          <span class="player-name">${p.name} ${p.score >= targetScore ? '👑' : ''}</span>
+        </div>
+        <div class="player-actions">
+          <button class="btn btn-wood btn-sm" onclick="openEditNameModal(${p.id})">✏️</button>
+          <button class="btn btn-wood btn-sm" onclick="openEditScoreModal(${p.id})">⚡ Score</button>
+        </div>
+      </div>
+      <div class="score-row">
+        <span class="player-score" onclick="openEditScoreModal(${p.id})">${p.score} <small style="font-size:0.9rem; font-weight:normal;">pts</small></span>
+        <span class="score-target-text">Objectif : ${targetScore}</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill ${p.score >= targetScore ? 'finished' : ''}" style="width: ${pct}%"></div>
+      </div>
+    `;
+    
+    card.onclick = (e) => {
+      if (!e.target.closest('button') && !e.target.closest('.player-score')) {
+        activePlayerIndex = idx;
+        playSound('click');
+        saveAllToStorage();
+        render();
+      }
+    };
+
+    container.appendChild(card);
+  });
+
+  if (players[activePlayerIndex]) {
+    document.getElementById('current-player-name').innerText = players[activePlayerIndex].name;
+  }
+}
+
+function resetModalState() {
+  document.getElementById('modal-custom-content').innerHTML = '';
+  document.getElementById('modal-btn-cancel').style.display = 'inline-flex';
+}
+
+function showModal(title, defaultValue, type, callback) {
+  playSound('click');
+  resetModalState();
+  document.getElementById('modal-title').innerText = title;
+  
+  const textElem = document.getElementById('modal-text');
+  textElem.style.display = 'none';
+  
+  const input = document.getElementById('modal-input');
+  input.style.display = 'block';
+  input.type = type;
+  input.value = defaultValue;
+  
+  document.getElementById('modal-btn-cancel').innerText = 'Annuler';
+  document.getElementById('modal-btn-confirm').innerText = 'Valider';
+  
+  document.getElementById('custom-modal-overlay').style.display = 'flex';
+  input.focus();
+  input.select();
+  currentModalCallback = callback;
+}
+
+function showConfirmModal(title, textMessage, onConfirmCallback) {
+  playSound('click');
+  resetModalState();
+  document.getElementById('modal-title').innerText = title;
+  
+  const textElem = document.getElementById('modal-text');
+  textElem.innerText = textMessage;
+  textElem.style.display = 'block';
+  
+  const input = document.getElementById('modal-input');
+  input.style.display = 'none';
+  
+  document.getElementById('modal-btn-cancel').innerText = 'Annuler';
+  document.getElementById('modal-btn-confirm').innerText = 'Confirmer';
+  
+  document.getElementById('custom-modal-overlay').style.display = 'flex';
+  currentModalCallback = (val) => { onConfirmCallback(); };
+}
+
+function closeModal() {
+  playSound('click');
+  document.getElementById('custom-modal-overlay').style.display = 'none';
+  currentModalCallback = null;
+  resetModalState();
+}
+
+function confirmModal() {
+  const input = document.getElementById('modal-input');
+  const val = input.style.display !== 'none' ? input.value : true;
+  if (currentModalCallback) {
+    currentModalCallback(val);
+  }
+  closeModal();
+}
+
+function closeAllSubmenus() {
+  document.getElementById('add-submenu').style.display = 'none';
+  document.getElementById('sub-submenu').style.display = 'none';
+  document.getElementById('zombie-submenu').style.display = 'none';
+  document.getElementById('skull-submenu').style.display = 'none';
+}
+
+function toggleAddMenu() {
+  playSound('click');
+  const menu = document.getElementById('add-submenu');
+  const isVis = menu.style.display === 'block';
+  closeAllSubmenus();
+  if (!isVis) menu.style.display = 'block';
+}
+
+function toggleSubMenu() {
+  playSound('click');
+  const menu = document.getElementById('sub-submenu');
+  const isVis = menu.style.display === 'block';
+  closeAllSubmenus();
+  if (!isVis) menu.style.display = 'block';
+}
+
+function toggleZombieMenu() {
+  playSound('click');
+  const menu = document.getElementById('zombie-submenu');
+  const isVis = menu.style.display === 'block';
+  closeAllSubmenus();
+  if (!isVis) menu.style.display = 'block';
+}
+
+function toggleSkullMenu() {
+  playSound('click');
+  const menu = document.getElementById('skull-submenu');
+  const isVis = menu.style.display === 'block';
+  closeAllSubmenus();
+  if (!isVis) menu.style.display = 'block';
+}
+
+function togglePirateCardOption() {
+  playSound('click');
+  const pirateCheck = document.getElementById('pirate-card-multiplier');
+  const peaceCheck = document.getElementById('peace-card-checkbox');
+  const swordsBox = document.getElementById('swords-select-box');
+
+  if (pirateCheck.checked) {
+    peaceCheck.checked = false;
+    swordsBox.style.display = 'none';
+  }
+}
+
+function togglePeaceCardOption() {
+  playSound('click');
+  const pirateCheck = document.getElementById('pirate-card-multiplier');
+  const peaceCheck = document.getElementById('peace-card-checkbox');
+  const swordsBox = document.getElementById('swords-select-box');
+
+  if (peaceCheck.checked) {
+    pirateCheck.checked = false;
+    swordsBox.style.display = 'flex';
+  } else {
+    swordsBox.style.display = 'none';
+  }
+}
+
+function openCustomAddModal() {
+  if (players.length === 0) return;
+  const p = players[activePlayerIndex];
+  showModal(`💰 Butin personnalisé pour ${p.name}`, "0", "number", (val) => {
+    const pts = parseInt(val);
+    if (!isNaN(pts)) addScoreToCurrentPlayer(Math.abs(pts));
+  });
+}
+
+function openCustomSubModal() {
+  if (players.length === 0) return;
+  const p = players[activePlayerIndex];
+  showModal(`💣 Perte personnalisée pour ${p.name}`, "100", "number", (val) => {
+    const pts = parseInt(val);
+    if (!isNaN(pts)) addScoreToCurrentPlayer(-Math.abs(pts));
+  });
+}
+
+function openEditNameModal(id) {
+  const p = players.find(item => item.id === id);
+  if (!p) return;
+  showModal("✏️ Nom du Capitaine", p.name, "text", (val) => {
+    if (val && val.trim() !== "") {
+      p.name = val.trim();
+      saveAllToStorage();
+      render();
+    }
+  });
+}
+
+function openEditScoreModal(id) {
+  const p = players.find(item => item.id === id);
+  if (!p) return;
+  showModal(`⚡ Score total de ${p.name}`, p.score, "number", (val) => {
+    let scoreVal = parseInt(val);
+    if (!isNaN(scoreVal)) {
+      if (!allowNegativeScores && scoreVal < 0) scoreVal = 0;
+      p.score = scoreVal;
+      saveAllToStorage();
+      render();
+    }
+  });
+}
+
+function resolveZombie(won) {
+  if (players.length === 0) return;
+  const activePlayer = players[activePlayerIndex];
+
+  if (won) {
+    playSound('victory');
+    const actualChange = adjustScore(activePlayer, 1200);
+    history.unshift({
+      type: 'zombie-win',
+      playerId: activePlayer.id,
+      playerName: activePlayer.name,
+      pts: actualChange,
+      newTotal: activePlayer.score,
+      savedActivePlayerIndex: activePlayerIndex
+    });
+  } else {
+    playSound('zombieDefeat');
+    const otherCount = players.length - 1;
+    if (otherCount > 0) {
+      const pointsPerOther = Math.round(1200 / otherCount);
+      const previousScores = {};
+      players.forEach(p => {
+        if (p.id !== activePlayer.id) {
+          previousScores[p.id] = p.score;
+          adjustScore(p, pointsPerOther);
+        }
+      });
+      history.unshift({
+        type: 'zombie-loss',
+        activePlayerId: activePlayer.id,
+        activePlayerName: activePlayer.name,
+        pointsPerOther: pointsPerOther,
+        previousScores: previousScores,
+        savedActivePlayerIndex: activePlayerIndex
+      });
+    }
+  }
+
+  renderHistory();
+  checkGameStatusAndAdvance();
+  saveAllToStorage();
+  render();
+}
+
+function resolveSkullIsland(count) {
+  if (players.length < 2) return;
+  playSound('skull');
+
+  const isDouble = document.getElementById('pirate-card-multiplier').checked;
+  const isPeace = document.getElementById('peace-card-checkbox').checked;
+  const swordsCount = parseInt(document.getElementById('swords-count-select').value) || 0;
+  
+  const pointsPerSkull = isDouble ? 200 : 100;
+  const penaltyToOthers = count * pointsPerSkull;
+  const activePlayer = players[activePlayerIndex];
+  const previousScores = {};
+
+  players.forEach(p => {
+    previousScores[p.id] = p.score;
+  });
+
+  players.forEach(p => {
+    if (p.id !== activePlayer.id) {
+      adjustScore(p, -penaltyToOthers);
+    }
+  });
+
+  let selfPenalty = 0;
+  if (isPeace && swordsCount > 0) {
+    selfPenalty = swordsCount * 500;
+    adjustScore(activePlayer, -selfPenalty);
+  }
+
+  history.unshift({
+    type: 'skull-island',
+    activePlayerId: activePlayer.id,
+    activePlayerName: activePlayer.name,
+    penalty: penaltyToOthers,
+    skulls: count,
+    isDouble: isDouble,
+    isPeace: isPeace,
+    swords: swordsCount,
+    selfPenalty: selfPenalty,
+    previousScores: previousScores,
+    savedActivePlayerIndex: activePlayerIndex
+  });
+
+  document.getElementById('pirate-card-multiplier').checked = false;
+  document.getElementById('peace-card-checkbox').checked = false;
+  document.getElementById('swords-select-box').style.display = 'none';
+
+  renderHistory();
+  checkGameStatusAndAdvance();
+  saveAllToStorage();
+  render();
+}
+
+function addScoreToCurrentPlayer(pts) {
+  if (players.length === 0) return;
+
+  if (pts > 0) {
+    playSound('coin');
+  } else if (pts < 0) {
+    playSound('bomb');
+  } else {
+    playSound('click');
+  }
+
+  const p = players[activePlayerIndex];
+  const prevScore = p.score;
+  const actualChange = adjustScore(p, pts);
+
+  history.unshift({
+    type: 'standard',
+    playerId: p.id,
+    playerName: p.name,
+    pts: pts,
+    actualChange: actualChange,
+    prevScore: prevScore,
+    newTotal: p.score,
+    savedActivePlayerIndex: activePlayerIndex
+  });
+
+  renderHistory();
+  checkGameStatusAndAdvance();
+  saveAllToStorage();
+  render();
+}
+
+function renderHistory() {
+  const container = document.getElementById('history-container');
+  container.innerHTML = history.slice(0, 10).map(h => {
+    if (h.type === 'skull-island') {
+      let badge = '';
+      if (h.isDouble) badge = ' 🏴‍☠️(x2)';
+      if (h.isPeace) badge = ` ☮️(Paix : ${h.swords} sabre${h.swords > 1 ? 's' : ''})`;
+
+      let detailSelf = h.selfPenalty > 0 ? ` & -${h.selfPenalty} pts à soi` : '';
+      return `<div class="history-item" style="color: #7d3c98;"><span><strong>💀 ${h.activePlayerName}</strong> (Têtes-de-Mort: ${h.skulls}${badge})</span><span><strong>-${h.penalty} pts</strong> aux rivaux${detailSelf}</span></div>`;
+    } else if (h.type === 'zombie-win') {
+      return `<div class="history-item" style="color: #1e8449;"><span><strong>🧟 ${h.playerName}</strong> (Zombie Gagné)</span><span><strong>+1200 pts</strong></span></div>`;
+    } else if (h.type === 'zombie-loss') {
+      return `<div class="history-item" style="color: #a93226;"><span><strong>🧟 ${h.activePlayerName}</strong> (Zombie Perdu)</span><span><strong>+${h.pointsPerOther} pts</strong> aux rivaux</span></div>`;
+    } else {
+      return `<div class="history-item"><span><strong>${h.playerName}</strong> : ${h.pts > 0 ? '+' + h.pts : h.pts} pts</span><span>(Total: ${h.newTotal})</span></div>`;
+    }
+  }).join('');
+}
+
+function undoLastTurn() {
+  playSound('click');
+  if (history.length === 0) return;
+  const last = history.shift();
+
+  if (last.savedActivePlayerIndex !== undefined) {
+    activePlayerIndex = last.savedActivePlayerIndex;
+  }
+
+  if (last.type === 'skull-island' || last.type === 'zombie-loss') {
+    if (last.previousScores) {
+      Object.keys(last.previousScores).forEach(id => {
+        const p = players.find(item => item.id === parseInt(id));
+        if (p) p.score = last.previousScores[id];
+      });
+    }
+  } else if (last.type === 'zombie-win') {
+    const p = players.find(item => item.id === last.playerId);
+    if (p) p.score -= last.pts;
+  } else {
+    const p = players.find(item => item.id === last.playerId);
+    if (p) p.score = last.prevScore !== undefined ? last.prevScore : p.score - last.actualChange;
+  }
+
+  const hasWinners = players.some(p => p.score >= targetScore);
+  if (!hasWinners) {
+    isFinalRound = false;
+    playersWhoHadFinalTurn.clear();
+  }
+
+  renderHistory();
+  saveAllToStorage();
+  render();
+}
+</script>
+</body>
+</html>
